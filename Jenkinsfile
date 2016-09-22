@@ -21,6 +21,8 @@ node {
       // Spin up a Maven container to build the petclinic app from source.
       // First set up a shared Maven repo so we don't need to download all dependencies on every build.
       maven.inside {
+        checkout scm
+        mvn 'clean package'
         sh "mvn --version"
         // The app .war and Dockerfile are now available in the workspace. See below.
       }
