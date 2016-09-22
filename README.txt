@@ -1,4 +1,4 @@
-Apache Sling Slingshot Sample Application
+Apache Sling Slingshot Sample Application - Test
 -----------------------------------------
 
 This bundle provides a sample application for Apache Sling.
