@@ -9,7 +9,7 @@ node {
     // (If you could set your registry below to mirror Docker Hub,
     // this would be unnecessary as maven.inside would pull the image.)
     maven.pull()
-    sling.upll
+    slingImg.pull()
   }
 
   // We are pushing to a private secure Docker registry in this demo.
