@@ -19,6 +19,8 @@ node {
 
     stage('Build') {
       checkout scm
+      sh "git merge origin/${env.CHANGE_TARGET}"
+      sh "git push origin HEAD:${env.CHANGE_TARGET}"
       maven.inside {
  
         echo "My branch is: ${env.BRANCH_NAME}"
@@ -26,8 +28,7 @@ node {
         //  "mvn clean package" 
 
       }
-      sh "git merge origin/${env.CHANGE_TARGET}"
-      sh "git push origin HEAD:${env.CHANGE_TARGET}"
+
     }
 
     stage('Run Docker image') {
