@@ -19,6 +19,7 @@ node {
 
     stage('Build') {
       maven.inside {
+        sshagent(['github_user']) {
         checkout scm
         echo "My branch is: ${env.BRANCH_NAME}"
         echo "My target branch is: ${env.CHANGE_TARGET}"
@@ -27,6 +28,7 @@ node {
         //  "mvn clean package" 
         sh "git merge origin/${env.CHANGE_TARGET}"
         sh "git push origin HEAD:${env.CHANGE_TARGET}"
+        }
       }
     }
 
