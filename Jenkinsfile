@@ -24,7 +24,8 @@ node {
         sh "git remote set-url origin git@${repositoryHost}:${repositoryPath}"
         echo "My branch is: ${env.BRANCH_NAME}"
         echo "My target branch is: ${env.CHANGE_TARGET}"
-        sh "mvn clean package" 
+        echo "git url ${env.GIT_URL }"
+        //  "mvn clean package" 
         sh "git merge origin/${env.CHANGE_TARGET}"
         sh "git push origin HEAD:${env.CHANGE_TARGET}"
       }
