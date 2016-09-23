@@ -20,8 +20,6 @@ node {
     stage('Build') {
       maven.inside {
         checkout scm
-        echo "git@${repositoryHost}:${repositoryPath}"
-        sh "git remote set-url origin git@${repositoryHost}:${repositoryPath}"
         echo "My branch is: ${env.BRANCH_NAME}"
         echo "My target branch is: ${env.CHANGE_TARGET}"
         echo "git url ${env.GIT_URL }"
