@@ -19,7 +19,7 @@ node {
 
     stage('Build') {
       maven.inside {
-        sshagent (credentials: ['github_user']) {
+        sshagent (['github_user']) {
           checkout scm
           echo "My branch is: ${env.BRANCH_NAME}"
           echo "My target branch is: ${env.CHANGE_TARGET}"
