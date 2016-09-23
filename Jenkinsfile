@@ -27,7 +27,6 @@ node {
         sh "mvn clean package" 
         sh "git merge origin/${env.CHANGE_TARGET}"
         sh "git push origin HEAD:${env.CHANGE_TARGET}"
-        }
       }
     }
 
