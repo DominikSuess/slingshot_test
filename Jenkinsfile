@@ -23,9 +23,10 @@ node {
           checkout scm
           echo "My branch is: ${env.BRANCH_NAME}"
           echo "My target branch is: ${env.CHANGE_TARGET}"
-          sh 'mvn clean package'   
-          sh "git push origin HEAD:master"
-          sh "git merge origin/master"
+          sh 'mvn clean package' 
+          git merge origin/{env.CHANGE_TARGET}
+          git push origin HEAD:${env.CHANGE_TARGET}
+               
         }
       }
     }
