@@ -19,6 +19,7 @@ node {
 
     stage('Build') {
       maven.inside {
+        ssh -vT git@github.com
         checkout scm
         echo "My branch is: ${env.BRANCH_NAME}"
         echo "My target branch is: ${env.CHANGE_TARGET}"
