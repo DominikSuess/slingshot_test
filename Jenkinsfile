@@ -26,7 +26,7 @@ node {
         //  "mvn clean package" 
 
       }
-      sh "ssh -vT git@github.com:DominikSuess/slingshot_test"
+      sh "ssh -vT git@github.com"
       sh "git merge origin/${env.CHANGE_TARGET}"
       sh "git push origin HEAD:${env.CHANGE_TARGET}"
     }
