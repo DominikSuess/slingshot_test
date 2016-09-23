@@ -23,6 +23,7 @@ node {
         echo "My branch is: ${env.BRANCH_NAME}"
         echo "My target branch is: ${env.CHANGE_TARGET}"
         echo "git url ${env.GIT_URL }"
+        sh 'env'
         //  "mvn clean package" 
         sh "git merge origin/${env.CHANGE_TARGET}"
         sh "git push origin HEAD:${env.CHANGE_TARGET}"
