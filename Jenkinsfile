@@ -20,7 +20,11 @@ node {
     stage('Build') {
       maven.inside {
         checkout scm
-        sh 'mvn clean package'
+    	 echo "My branch is: ${env.BRANCH_NAME}"
+   	 echo "My target branch is: ${env.CHANGE_TARGET}"
+   	 sh 'mvn clean package'
+   	 sh "git push origin HEAD:master"
+	 sh "git merge origin/master"
       }
     }
 
