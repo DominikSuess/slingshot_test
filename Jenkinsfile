@@ -20,6 +20,7 @@ node {
     stage('Build') {
       maven.inside {
         sshagent(['github_ssh']) {
+        sh 'ssh-keygen -R git@github.com'
         checkout scm
         echo "My branch is: ${env.BRANCH_NAME}"
         echo "My target branch is: ${env.CHANGE_TARGET}"
