@@ -19,7 +19,8 @@ node {
 
     stage('Build') {
       maven.inside {
-        sshagent(['github_ssh']) {
+        sh 'mkdir ~/.ssh'
+        sh 'touch ~/.ssh/known_hosts'
         sh 'ssh-keygen -R git@github.com'
         checkout scm
         echo "My branch is: ${env.BRANCH_NAME}"
@@ -27,7 +28,6 @@ node {
         //  "mvn clean package" 
         sh "git merge origin/${env.CHANGE_TARGET}"
         sh "git push origin HEAD:${env.CHANGE_TARGET}"
-        }
       }
     }
 
