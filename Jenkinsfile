@@ -19,15 +19,14 @@ node {
 
     stage('Build') {
       maven.inside {
-        sshagent (['github_user']) {
-          checkout scm
-          echo "My branch is: ${env.BRANCH_NAME}"
-          echo "My target branch is: ${env.CHANGE_TARGET}"
-          sh 'mvn clean package' 
-          git merge origin/${env.CHANGE_TARGET}
-          git push origin HEAD:${env.CHANGE_TARGET}
-          }
-               
+        checkout scm
+        echo "git@${repositoryHost}:${repositoryPath}"
+        sh "git remote set-url origin git@${repositoryHost}:${repositoryPath}"
+        echo "My branch is: ${env.BRANCH_NAME}"
+        echo "My target branch is: ${env.CHANGE_TARGET}"
+        sh "mvn clean package" 
+        sh "git merge origin/${env.CHANGE_TARGET}"
+        sh "git push origin HEAD:${env.CHANGE_TARGET}"
         }
       }
     }
