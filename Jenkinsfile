@@ -16,32 +16,60 @@ node {
   // 'docker-registry-login' is the username/password credentials ID as defined in Jenkins Credentials.
   // This is used to authenticate the Docker client to the registry.
   docker.withRegistry('https://localhost/', 'docker-registry-login') {
-
-    stage('Build') {
-      sshagent (credentials: ['github_ssh']) {
-        checkout scm
-        sh "git merge origin/${env.CHANGE_TARGET}"
-        sh "git push origin HEAD:${env.CHANGE_TARGET}"
-      
-        maven.inside {
- 
-          echo "My branch is: ${env.BRANCH_NAME}"
-          echo "My target branch is: ${env.CHANGE_TARGET}"
-          //  "mvn clean package" 
-
+    def slingContainer
+    try {
+      // we're globaly locking this resource (avoid parallelization, as we need to run on a shared docker env)
+      // if we have distinct slaves we can lock the resource for the concrete environment and have parallel builds on multiple slaves
+      // milestone 
+      lock('scm-workspace') {
+        stage('Build') {
+          sshagent (credentials: ['github_ssh']) {
+            checkout scm
+            // in case of parallelization we might need to push the merged state to some jenkins-branch
+            // for inter slave communication and not merge from master but from jenkinsbranch
+            sh "git fetch --all"
+            sh "git rebase origin/${env.CHANGE_TARGET}"
+            maven.inside {
+              mvn clean package" 
+            }
+          }
+        }
+        
+        stage('Integrationtesting') {
+          slingContainer = slingImg.run('-p 8090:8080')
+          maven.inside {
+            sh "mvn sling:install -Dsling.port=8090"
+          }
+        }
+    
+    // we only need to release in case there where no newer builds succeeding
+    milestone 1 
+        stage('Release & Baseline') {
+            echo "Release & Merge"
+            sh "git push origin HEAD:${env.CHANGE_TARGET}"
+            slingContainer.stop()
+            slingImg.push();
         }
       }
+    } finally {
+     if (slingContainer)
+       slingContainer.stop()
     }
+  }
 
-    stage('Run Docker image') {
+  milestone 2
+  stage('Deploy to stage') {
+    slingImg.inside {
+      sh "echo 'deploy stage'"
+      }
+    }
+  }
+  
+  milestone 3
+    stage('Deploy to production') {
         slingImg.inside {
-            sh "echo 'test'"
+            sh "echo 'deploy production'"
         }
-    }
-
-
-    stage('Promote Image') {
-        slingImg.push();
     }
   }
 }
