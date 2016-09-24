@@ -29,7 +29,6 @@ node {
             // for inter slave communication and not merge from master but from jenkinsbranch
             sh "git fetch origin"
             sh "git branch --set-upstream-to=origin/${env.CHANGE_TARGET} ${env.CHANGE_TARGET}"
-            sh "git branch --set-upstream-to=origin/${env.BRANCH_NAME} ${env.BRANCH_NAME}"
             sh "git rebase origin/${env.CHANGE_TARGET}"
             maven.inside {
               sh "mvn clean package" 
