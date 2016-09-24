@@ -55,7 +55,7 @@ node {
           echo "Release & Merge"
           sshagent (credentials: ['github_ssh']) {
             sh "git checkout ${env.CHANGE_TARGET}"
-            sh "git pull --rebase origin"
+            sh "git pull --rebase origin ${env.CHANGE_TARGET}"
             sh "git merge --no-ff --log -m 'Merge pull request' ${env.BRANCH_NAME}"
             sh "git push --set-upstream origin ${env.CHANGE_TARGET}"
           }
