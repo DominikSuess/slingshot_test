@@ -57,8 +57,7 @@ node {
   } finally {
     if (slingContainer)
       slingContainer.stop()
-  }
-  
+  }  
 
   milestone 2
   stage('Deploy to stage') {
@@ -73,3 +72,4 @@ node {
       sh "echo 'deploy production'"
     }
   }
+}
