@@ -64,7 +64,6 @@ node {
   stage('Deploy to stage') {
     slingImg.inside {
       sh "echo 'deploy stage'"
-      }
     }
   }
   
