@@ -53,11 +53,12 @@ node {
         sh "docker push apachesling/sling:latest"
         
       }
-    } finally {
-     if (slingContainer)
-       slingContainer.stop()
     }
+  } finally {
+    if (slingContainer)
+      slingContainer.stop()
   }
+  
 
   milestone 2
   stage('Deploy to stage') {
