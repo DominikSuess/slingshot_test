@@ -48,6 +48,9 @@ node {
         milestone 1 
         stage('Release & Baseline') {
           echo "Release & Merge"
+          sh "git checkout origin/${env.CHANGE_TARGET}"
+          sh "git rebase ${env.BRANCH_NAME}"
+          sh "git push"
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
           // make sure reference is really to the latest
           slingImg = docker.image("apachesling/sling")
