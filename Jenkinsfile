@@ -18,8 +18,8 @@ node {
   docker.withRegistry('https://localhost/', 'docker-registry-login') {
 
     stage('Build') {
-      sshagent (credentials: ['github_ssh']) {
-        maven.inside {
+      maven.inside {
+        sshagent (credentials: ['github_ssh']) {
           checkout scm
           sh "git merge origin/${env.CHANGE_TARGET}"
           sh "git push origin HEAD:${env.CHANGE_TARGET}" 
