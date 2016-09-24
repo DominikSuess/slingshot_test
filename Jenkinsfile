@@ -36,14 +36,14 @@ node {
         }
           
         stage('Testing') {
-          parallel(Integration: {
+          parallel("Integration": {
             slingContainer = slingImg.run('-p 8090:8080')
             env.SLING_CONTAINER_ID = slingContainer.id
             maven.inside {
               // this should deploy on the container - port due to unkown reasons unreachable
               // sh "mvn sling:install -Dsling.url=http://localhost:8090/system/console"   
             }
-          }, Static-Analysis: { echo 'Mocked static testing}
+          }, "Static-Analysis": { echo 'Mocked static testing}
           )
         }
     
