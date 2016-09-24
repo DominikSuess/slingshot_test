@@ -43,8 +43,9 @@ node {
               // this should deploy on the container - port due to unkown reasons unreachable
               // sh "mvn sling:install -Dsling.url=http://localhost:8090/system/console"   
             }
-          }, "Static-Analysis": { echo 'Mocked static testing'}
-          )
+          }, "Static-Analysis": { 
+            echo 'Mocked static testing'
+          })
         }
     
         // we only need to release in case there where no newer builds succeeding
