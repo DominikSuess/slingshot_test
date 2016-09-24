@@ -50,8 +50,9 @@ node {
         }
     
         // we only need to release in case there where no newer builds succeeding
-        milestone 1 
+
         stage('Release & Baseline') {
+          milestone 1 
           echo "Release & Merge"
           sh "git checkout ${env.CHANGE_TARGET}"
           sh "git rebase origin/${env.CHANGE_TARGET}"
