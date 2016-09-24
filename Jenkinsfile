@@ -54,7 +54,7 @@ node {
         stage('Release & Baseline') {
           echo "Release & Merge"
           sh "git checkout ${env.CHANGE_TARGET}"
-          sh 'git merge --no-ff --log -m "Merge pull request" ${env.BRANCH_NAME}'
+          sh "git merge --no-ff --log -m 'Merge pull request' ${env.BRANCH_NAME}"
           sh "git push"
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
           // make sure reference is really to the latest
