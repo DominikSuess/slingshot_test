@@ -5,14 +5,14 @@ node {
   def slingImg = docker.image("apachesling/sling");
 
   stage('Mirror') {
-    // First make sure the slave has this image.
+    // First make sure the slave has this image. 
     // (If you could set your registry below to mirror Docker Hub,
     // this would be unnecessary as maven.inside would pull the image.)
     maven.pull()
     slingImg.pull()
   }
   
-  // we're globaly locking this resource (avoid parallelization, as we need to run on a shared docker env)
+  // we're globaly locking this resource (avoid parallelization, as we need to run on a shared docker environment)
   // if we have distinct slaves we can lock the resource for the concrete environment and have parallel builds on multiple slaves
   lock('docker-and-scm-workspace') {
   
