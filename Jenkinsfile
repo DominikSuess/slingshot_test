@@ -49,13 +49,12 @@ node {
           })
         }
     
-        // we only need to release in case there where no newer builds succeeding
-
+        // Milestone should be set - we only need to release in case there where no newer builds succeeding
+        // but hitting https://issues.jenkins-ci.org/browse/JENKINS-38464
         stage('Release & Baseline') {
           echo "Release & Merge"
           sh "git checkout ${env.CHANGE_TARGET}"
-          sh "git rebase origin/${env.CHANGE_TARGET}"
-          sh "git rebase origin/${env.BRANCH_NAME}"
+          sh 'git merge --no-ff --log -m "Merge pull request #${env.BRANCH_NAME}" ${env.BRANCH_NAME}'
           sh "git push"
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
           // make sure reference is really to the latest
