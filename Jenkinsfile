@@ -68,8 +68,12 @@ node {
     }
   }
 
-  stage('Deploy to stage') {
-    sh "echo 'deploy stage'" 
+  stage('Staging') {
+    parallel(Endurance: {
+           echo 'Mocking endurance Testing'
+          }, UserAcceptance: { 
+            input 'Confirm User Acceptance'
+          })
   }
   
   stage('Deploy to production') {
