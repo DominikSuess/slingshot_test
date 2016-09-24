@@ -27,7 +27,9 @@ node {
             checkout scm
             // in case of parallelization we might need to push the merged state to some jenkins-branch
             // for inter slave communication and not merge from master but from jenkinsbranch
-            sh "git fetch --all"
+            sh "git fetch origin"
+            sh "git branch --set-upstream-to=origin/${env.CHANGE_TARGET} ${env.CHANGE_TARGET}"
+            sh "git branch --set-upstream-to=origin/${env.BRANCH_NAME} ${env.BRANCH_NAME}"
             sh "git rebase origin/${env.CHANGE_TARGET}"
             maven.inside {
               sh "mvn clean package" 
@@ -57,7 +59,6 @@ node {
             sh "git checkout ${env.CHANGE_TARGET}"
             sh "git pull --rebase origin"
             sh "git merge --no-ff --log -m 'Merge pull request' ${env.BRANCH_NAME}"
-            sh "git remote -v"
             sh "git push --set-upstream origin ${env.CHANGE_TARGET}"
           }
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
