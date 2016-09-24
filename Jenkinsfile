@@ -38,7 +38,7 @@ node {
         stage('Integrationtesting') {
           slingContainer = slingImg.run('-p 8090:8080')
           maven.inside {
-            sh "mvn sling:install -Dsling.port=8090"
+            sh "mvn sling:install -Dsling.url=http://localhost:8090/system/console"
           }
         }
     
