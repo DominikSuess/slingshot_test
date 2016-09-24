@@ -42,15 +42,18 @@ node {
             // this should deploy on the container - port due to unkown reasons unreachable
             // sh "mvn sling:install -Dsling.url=http://localhost:8090/system/console"   
           }
-          sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
-          slingContainer.stop()
+
         }
     
       // we only need to release in case there where no newer builds succeeding
       milestone 1 
         stage('Release & Baseline') {
           echo "Release & Merge"
-          sh "docker push apachesling/sling:latest"
+          sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
+          // make sure reference is really to the latest
+          slingImg = docker.image("apachesling/sling")
+          // push to private registry
+          slingImg.push()
         }
       }
     } finally {
