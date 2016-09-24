@@ -46,30 +46,30 @@ node {
           slingContainer.stop()
         }
     
-    // we only need to release in case there where no newer builds succeeding
-    milestone 1 
-      stage('Release & Baseline') {
-        echo "Release & Merge"
-        sh "docker push apachesling/sling:latest"
-        
+      // we only need to release in case there where no newer builds succeeding
+      milestone 1 
+        stage('Release & Baseline') {
+          echo "Release & Merge"
+          sh "docker push apachesling/sling:latest"
+        }
+      }
+    } finally {
+      if (slingContainer)
+        slingContainer.stop()
+    }  
+
+    milestone 2
+    stage('Deploy to stage') {
+      slingImg.inside {
+        sh "echo 'deploy stage'"
       }
     }
-  } finally {
-    if (slingContainer)
-      slingContainer.stop()
-  }  
-
-  milestone 2
-  stage('Deploy to stage') {
-    slingImg.inside {
-      sh "echo 'deploy stage'"
-    }
-  }
   
-  milestone 3
-  stage('Deploy to production') {
-    slingImg.inside {
-      sh "echo 'deploy production'"
+    milestone 3
+    stage('Deploy to production') {
+      slingImg.inside {
+        sh "echo 'deploy production'"
+      }
     }
   }
 }
