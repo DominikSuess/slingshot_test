@@ -19,7 +19,6 @@ node {
 
     stage('Build') {
       checkout scm
-      sh "ssh -vT git@github.com"
       sh "git merge origin/${env.CHANGE_TARGET}"
       sh "git push origin HEAD:${env.CHANGE_TARGET}"
       
