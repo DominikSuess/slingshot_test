@@ -58,6 +58,7 @@ node {
             sh "git checkout ${env.CHANGE_TARGET}"
             sh "git reset --hard origin/${env.CHANGE_TARGET}"
             sh "git merge --no-ff --log -m 'Merge pull request' ${env.BRANCH_NAME}"
+            sh "git log --graph"
             sh "git push --set-upstream origin ${env.CHANGE_TARGET}"
           }
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
