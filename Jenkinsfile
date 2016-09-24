@@ -56,8 +56,7 @@ node {
           sshagent (credentials: ['github_ssh']) {
             sh "git checkout ${env.CHANGE_TARGET}"
             sh "git merge --no-ff --log -m 'Merge pull request' ${env.BRANCH_NAME}"
-            sh "git diff"
-            sh "git commit"
+            sh "git remote -v"
             sh "git push --set-upstream origin ${env.CHANGE_TARGET}"
           }
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
