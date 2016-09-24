@@ -55,6 +55,7 @@ node {
           echo "Release & Merge"
           sh "git checkout -b ${env.BRANCH_NAME}"
           sh "git rebase ${env.CHANGE_TARGET}"
+          sh "git checkout ${env.CHANGE_TARGET}"
           sh "git merge --no-ff --log -m 'Merge pull request' ${env.BRANCH_NAME}"
           sh "git push"
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
