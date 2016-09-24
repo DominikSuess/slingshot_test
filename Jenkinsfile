@@ -66,10 +66,8 @@ node {
   }
   
   milestone 3
-    stage('Deploy to production') {
-        slingImg.inside {
-            sh "echo 'deploy production'"
-        }
+  stage('Deploy to production') {
+    slingImg.inside {
+      sh "echo 'deploy production'"
     }
   }
-}
