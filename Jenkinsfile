@@ -35,21 +35,25 @@ node {
           }
         }
           
-        stage('Integrationtesting') {
-          slingContainer = slingImg.run('-p 8090:8080')
-          env.SLING_CONTAINER_ID = slingContainer.id
-          maven.inside {
-            // this should deploy on the container - port due to unkown reasons unreachable
-            // sh "mvn sling:install -Dsling.url=http://localhost:8090/system/console"   
-          }
+        stage('Testing') {
+          parallel(Integration: {
+            slingContainer = slingImg.run('-p 8090:8080')
+            env.SLING_CONTAINER_ID = slingContainer.id
+            maven.inside {
+              // this should deploy on the container - port due to unkown reasons unreachable
+              // sh "mvn sling:install -Dsling.url=http://localhost:8090/system/console"   
+            }
+          }, {Static Analysis:{ echo 'Mocked static testing}
+          })
         }
     
         // we only need to release in case there where no newer builds succeeding
         milestone 1 
         stage('Release & Baseline') {
           echo "Release & Merge"
+          sh "git rebase origin/${env.CHANGE_TARGET}"
           sh "git checkout origin/${env.CHANGE_TARGET}"
-          sh "git rebase ${env.BRANCH_NAME}"
+          sh "git merge ${env.BRANCH_NAME}"
           sh "git push"
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
           // make sure reference is really to the latest
