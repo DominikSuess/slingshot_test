@@ -57,7 +57,8 @@ node {
           sshagent (credentials: ['github_ssh']) {
             sh "git checkout ${env.CHANGE_TARGET}"
             sh "git reset --hard origin/${env.CHANGE_TARGET}"
-            sh "git rebase ${env.BRANCH_NAME}"
+            sh "git pull origin"
+            sh "git merge ${env.BRANCH_NAME}"
             sh "git push --set-upstream origin ${env.CHANGE_TARGET}"
           }
           sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
