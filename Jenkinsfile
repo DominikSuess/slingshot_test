@@ -18,18 +18,19 @@ node {
   docker.withRegistry('https://localhost/', 'docker-registry-login') {
 
     stage('Build') {
-      checkout scm
-      sh "git merge origin/${env.CHANGE_TARGET}"
-      sh "git push origin HEAD:${env.CHANGE_TARGET}"
+      sshagent (credentials: ['github_ssh']) {
+        checkout scm
+        sh "git merge origin/${env.CHANGE_TARGET}"
+        sh "git push origin HEAD:${env.CHANGE_TARGET}"
       
-      maven.inside {
+        maven.inside {
  
-        echo "My branch is: ${env.BRANCH_NAME}"
-        echo "My target branch is: ${env.CHANGE_TARGET}"
-        //  "mvn clean package" 
+          echo "My branch is: ${env.BRANCH_NAME}"
+          echo "My target branch is: ${env.CHANGE_TARGET}"
+          //  "mvn clean package" 
 
+        }
       }
-
     }
 
     stage('Run Docker image') {
