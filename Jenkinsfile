@@ -30,7 +30,7 @@ node {
             sh "git fetch --all"
             sh "git rebase origin/${env.CHANGE_TARGET}"
             maven.inside {
-              mvn clean package" 
+              sh "mvn clean package" 
             }
           }
         }
