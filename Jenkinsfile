@@ -1,14 +1,14 @@
 node {
   git '/tmp/repo'
 
-  def maven = docker.image('maven:3.3.9-jdk-8'); // https://registry.hub.docker.com/_/maven/
+  def mavenImg = docker.image('maven:3.3.9-jdk-8'); // https://registry.hub.docker.com/_/maven/
   def slingImg = docker.image("apachesling/sling");
 
   stage('Mirror') {
     // First make sure the slave has this image. 
     // (If you could set your registry below to mirror Docker Hub,
     // this would be unnecessary as maven.inside would pull the image.)
-    maven.pull()
+    mavenImg.pull()
     slingImg.pull()
   }
   
@@ -30,7 +30,7 @@ node {
             sh "git fetch origin"
             sh "git branch --set-upstream-to=origin/${env.CHANGE_TARGET} ${env.CHANGE_TARGET}"
             sh "git rebase origin/${env.CHANGE_TARGET}"
-            maven.inside {
+            mavenImg.inside {
               sh "mvn clean package" 
             }      
           }
