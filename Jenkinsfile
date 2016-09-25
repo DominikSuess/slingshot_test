@@ -38,7 +38,7 @@ node {
           stage('Testing') {
             parallel(Integration: {
               sling = slingImg.run('')
-              mavenImg.inside("--link $sling.id:sling") {
+              mavenImg.inside("--link ${sling.id}:sling") {
                 sh "mvn sling:install -Dsling.url=http://sling:8080/system/console"
               }
             }, StaticAnalysis: { 
