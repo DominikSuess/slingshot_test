@@ -21,7 +21,7 @@ node {
       // 'docker-registry-login' is the username/password credentials ID as defined in Jenkins Credentials.
       // This is used to authenticate the Docker client to the registry.
       docker.withRegistry('https://localhost/', 'docker-registry-login') {
-        def slingContainer
+        def sling
         try {
           stage('Build') {
             checkout scm
@@ -37,12 +37,9 @@ node {
           
           stage('Testing') {
             parallel(Integration: {
-              slingContainer = slingImg.run('-p 8090:8080')
-              env.SLING_CONTAINER_ID = slingContainer.id
-              maven.inside {
-                echo 'test'
-                // this should deploy on the container - port due to unkown reasons unreachable
-                // sh "mvn sling:install -Dsling.url=http://localhost:8090/system/console"   
+              sling = slingImg.run('')
+              mavenImg.inside("--link $sling.id:sling") {
+                sh "mvn sling:install -Dsling.url=http://sling:8080/system/console"
               }
             }, StaticAnalysis: { 
               echo 'Mocked static testing'
@@ -60,14 +57,14 @@ node {
             sh "git merge ${env.BRANCH_NAME}"
             sh "git push --set-upstream origin ${env.CHANGE_TARGET}"
           
-            sh "docker commit ${env.SLING_CONTAINER_ID} apachesling/sling:latest"
+            sh "docker commit ${sling.id} apachesling/sling:latest"
             // make sure reference is really to the latest
             slingImg = docker.image("apachesling/sling")
             // push to private registry
             slingImg.push()
           }  
         } finally {
-            slingContainer.stop()
+            sling.stop()
         }  
       }
     }
